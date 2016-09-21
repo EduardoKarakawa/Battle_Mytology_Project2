@@ -1,4 +1,8 @@
+#pragma once
 #include "ofApp.h"
+#include "mover.h"
+#include "jogador.h"
+
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -11,7 +15,7 @@ void ofApp::setup(){
 	personagem.sprite.loadImage("andando.png");
 	personagem.posicao.set(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
 	personagem.sprite.setAnchorPoint(personagem.sprite.getWidth() / 2, personagem.sprite.getWidth() / 2);
-	personagem.velocidade = 50.f;
+	personagem.velocidade = 500.f;
 	personagem.velocidadeAnimacao = 0.5f;
 	personagem.frame = 0;
 	personagem.totalFrames = personagem.sprite.getHeight() / personagem.sprite.getWidth();
@@ -29,14 +33,15 @@ void ofApp::update(){
 	//Trocando os frames do player para animar
 	personagem.frameTime += gameTime; //Fazendo contagem de tempo
 	//Trocando o indice de posição do frame do player
+
 	if (personagem.frameTime >= personagem.velocidadeAnimacao) {	
 		personagem.frame = (personagem.frame + 1) % personagem.totalFrames;
 		personagem.frameTime = 0;
 	}
 
 	//Movimentando o player
-	movimentaPlayer(personagem, teclado, gameTime);
-	movAtritoPlayer(personagem, teclado, gameTime);
+	Mover::jogador(personagem, teclado, gameTime);
+	Mover::atritoPlayer(personagem, teclado, gameTime);
 }
 
 

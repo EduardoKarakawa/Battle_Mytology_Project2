@@ -3,7 +3,7 @@
 #include "mover.h"
 #include "jogador.h"
 
-
+Jogador player;
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -12,13 +12,14 @@ void ofApp::setup(){
 	before = ofGetElapsedTimef();
 
 	//Inicializando o Player
-	personagem.sprite.loadImage("andando.png");
-	personagem.posicao.set(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
-	personagem.sprite.setAnchorPoint(personagem.sprite.getWidth() / 2, personagem.sprite.getWidth() / 2);
-	personagem.velocidade = 500.f;
-	personagem.velocidadeAnimacao = 0.5f;
-	personagem.frame = 0;
-	personagem.totalFrames = personagem.sprite.getHeight() / personagem.sprite.getWidth();
+	//personagem.sprite.loadImage("andando.png");
+	//personagem.posicao.set(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
+	//personagem.sprite.setAnchorPoint(personagem.sprite.getWidth() / 2, personagem.sprite.getWidth() / 2);
+	//personagem.velocidade = 500.f;
+	//personagem.velocidadeAnimacao = 0.5f;
+	//personagem.frame = 0;
+	//personagem.totalFrames = personagem.sprite.getHeight() / personagem.sprite.getWidth();
+	player.iniciar();
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -30,23 +31,23 @@ void ofApp::update(){
 
 
 	//Trocando os frames do player para animar
-	personagem.frameTime += gameTime; //Fazendo contagem de tempo
+	player.frameTime += gameTime; //Fazendo contagem de tempo
 	//Trocando o indice de posição do frame do player
 
-	if (personagem.frameTime >= personagem.velocidadeAnimacao) {	
-		personagem.frame = (personagem.frame + 1) % personagem.totalFrames;
-		personagem.frameTime = 0;
+	if (player.frameTime >= player.velocidadeAnimacao) {
+		player.frame = (player.frame + 1) % player.totalFrames;
+		player.frameTime = 0;
 	}
 
 	//Movimentando o player
-	Mover::jogador(personagem, teclado, gameTime);
-	Mover::atritoPlayer(personagem, teclado, gameTime);
+	player.mover(teclado, gameTime);
+	player.atrito(teclado, gameTime);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ofApp::drawNaTela(Player& objt){
+void ofApp::drawNaTela(Player objt){
 
 }
 
@@ -55,7 +56,7 @@ void ofApp::drawNaTela(Player& objt){
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::draw(){
 
-	personagem.sprite.drawSubsection(personagem.posicao.x, personagem.posicao.y, personagem.sprite.getWidth(), personagem.sprite.getWidth(), 0, personagem.sprite.getWidth()*personagem.frame);
+	player.sprite.drawSubsection(player.posicao.x, player.posicao.y, player.sprite.getWidth(), player.sprite.getWidth(), 0, player.sprite.getWidth()*player.frame);
 }
 
 

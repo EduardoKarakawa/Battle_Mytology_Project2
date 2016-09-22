@@ -7,9 +7,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\mover.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\jogador.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -24,9 +21,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mover.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\jogador.h">

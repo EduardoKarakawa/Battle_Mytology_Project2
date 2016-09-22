@@ -43,12 +43,12 @@ class ofApp : public ofBaseApp{
 		};
 
 
-		Player personagem;
+		//Player personagem;
 		float before, gameTime;
 		KeyInput teclado;
 
 
-		void drawNaTela(Player& objt);
+		void drawNaTela(Player objt);
 		
 		
 

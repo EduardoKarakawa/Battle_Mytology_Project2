@@ -177,12 +177,10 @@
   <ItemGroup>
     <ClCompile Include="src\jogador.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\mover.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\jogador.h" />
-    <ClInclude Include="src\mover.h" />
     <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
   <ItemGroup>

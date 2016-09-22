@@ -1,6 +1,5 @@
 #pragma once
 #include "ofApp.h"
-#include "mover.h"
 #include "jogador.h"
 
 Jogador player;

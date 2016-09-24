@@ -10,14 +10,8 @@ void ofApp::setup(){
 	//Iniciando contagem de tempo de execução
 	before = ofGetElapsedTimef();
 
+
 	//Inicializando o Player
-	//personagem.sprite.loadImage("andando.png");
-	//personagem.posicao.set(ofGetWindowWidth()/2, ofGetWindowHeight()/2);
-	//personagem.sprite.setAnchorPoint(personagem.sprite.getWidth() / 2, personagem.sprite.getWidth() / 2);
-	//personagem.velocidade = 500.f;
-	//personagem.velocidadeAnimacao = 0.5f;
-	//personagem.frame = 0;
-	//personagem.totalFrames = personagem.sprite.getHeight() / personagem.sprite.getWidth();
 	player.iniciar();
 }
 
@@ -29,18 +23,11 @@ void ofApp::update(){
 	before = ofGetElapsedTimef();
 
 
-	//Trocando os frames do player para animar
-	player.frameTime += gameTime; //Fazendo contagem de tempo
-	//Trocando o indice de posição do frame do player
-
-	if (player.frameTime >= player.velocidadeAnimacao) {
-		player.frame = (player.frame + 1) % player.totalFrames;
-		player.frameTime = 0;
-	}
-
-	//Movimentando o player
-	player.mover(teclado, gameTime);
-	player.atrito(teclado, gameTime);
+	//Controlando o player
+		player.mover(teclado, gameTime);
+		player.atrito(teclado, gameTime);
+		player.animacao(gameTime);
+		player.acoes(teclado);
 }
 
 
@@ -55,13 +42,14 @@ void ofApp::drawNaTela(Player objt){
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::draw(){
 
-	player.sprite.drawSubsection(player.posicao.x, player.posicao.y, player.sprite.getWidth(), player.sprite.getWidth(), 0, player.sprite.getWidth()*player.frame);
+	player.sprite.drawSubsection(player.posicao.x, player.posicao.y, player.spriteTamX, player.spriteTamY, player.spriteTamX * player.frame, player.spriteTamY * player.direcao);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::keyPressed(int key){
+	//Inputs de movimentação
 	if ((key == 'W') || (key == 'w'))
 		teclado.keyW = true;
 	if ((key == 'S') || (key == 's'))
@@ -70,12 +58,23 @@ void ofApp::keyPressed(int key){
 		teclado.keyA = true;
 	if ((key == 'D') || (key == 'd'))
 		teclado.keyD = true;
+
+	//Inputs de ataque
+	if (key == OF_KEY_UP)
+		teclado.keyUp = true;
+	if (key == OF_KEY_DOWN)
+		teclado.keyDown = true;
+	if (key == OF_KEY_LEFT	)
+		teclado.keyLeft= true;
+	if (key == OF_KEY_RIGHT)
+		teclado.keyRight = true;
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::keyReleased(int key){
+	//Inputs de movimentação
 	if ((key == 'W') || (key == 'w'))
 		teclado.keyW = false;
 	if ((key == 'S') || (key == 's'))
@@ -84,6 +83,16 @@ void ofApp::keyReleased(int key){
 		teclado.keyA = false;
 	if ((key == 'D') || (key == 'd'))
 		teclado.keyD = false;
+
+	//Inputs de ataque
+	if (key == OF_KEY_UP)
+		teclado.keyUp = false;
+	if (key == OF_KEY_DOWN)
+		teclado.keyDown = false;
+	if (key == OF_KEY_LEFT)
+		teclado.keyLeft = false;
+	if (key == OF_KEY_RIGHT)
+		teclado.keyRight = false;
 }
 
 

@@ -50,7 +50,7 @@ void Jogador::mover(ofApp::KeyInput teclas, float tempo) {
 		velY -= velocidade * tempo;
 	}
 
-	//Chama a funcao de atrito para diminuir a velocidade nas direcoes que nao precisa mover
+	//Chama a funcao de atrito para diminuir a velocidade nas direcoes que nao precisa mover 
 	atrito(teclas, tempo);
 
 	//Atualiza a posicao do player

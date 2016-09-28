@@ -2,12 +2,6 @@
 
 #include "ofMain.h"
 
-
-
-
-
-
-
 class ofApp : public ofBaseApp{
 	
 
@@ -28,12 +22,6 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
-		struct Player {
-			ofImage sprite;
-			ofVec2f posicao;
-			float velX, velY, velocidade, velocidadeAnimacao, frameTime;
-			int frame, totalFrames;
-		};
 
 		struct KeyInput {
 			bool keyUp, keyDown;
@@ -41,16 +29,10 @@ class ofApp : public ofBaseApp{
 			bool keyW, keyS;
 			bool keyA, keyD;
 		};
-
-
-		//Player personagem;
+		
+				
+	
 		float before, gameTime;
 		KeyInput teclado;
-
-
-		void drawNaTela(Player objt);
-		
-		
-
-		
+			
 };

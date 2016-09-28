@@ -1,8 +1,12 @@
 #pragma once
 #include "ofApp.h"
+
 #include "jogador.h"
+#include "mapa.h"
 
 Jogador player;
+Mapa mundo;
+ofVec2f v;
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -10,39 +14,47 @@ void ofApp::setup(){
 	//Iniciando contagem de tempo de execução
 	before = ofGetElapsedTimef();
 
+	//Iniciando o Mundo
+	mundo.iniciar(0,0);
 
 	//Inicializando o Player
 	player.iniciar();
+
+	
+	v.set(278, 197);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::update(){
 	//Atualizando a contagem de tempo de execução do jogo.
-	gameTime = ofGetElapsedTimef() - before;
-	before = ofGetElapsedTimef();
+		gameTime = ofGetElapsedTimef() - before;
+		before = ofGetElapsedTimef();
 
+		
+		player.colidiuCom(v, mundo.posicao, 150);
 
 	//Controlando o player
+		
 		player.mover(teclado, gameTime);
 		player.atrito(teclado, gameTime);
 		player.animacao(gameTime);
 		player.acoes(teclado);
-}
 
-
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void ofApp::drawNaTela(Player objt){
-
+	//Controlando o Mundo
+		mundo.mover(player.velocidade);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::draw(){
+	
+	mundo.desenhar();
 
-	player.sprite.drawSubsection(player.posicao.x, player.posicao.y, player.spriteTamX, player.spriteTamY, player.spriteTamX * player.frame, player.spriteTamY * player.direcao);
+	player.desenhar(mundo.posicao);
+	ofDrawCircle(v + mundo.posicao, 150);
+
 }
 
 

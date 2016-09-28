@@ -1,11 +1,6 @@
 #pragma once
 
-#include "ofApp.h"
 #include "jogador.h"
-
-
-
-
 
 ofApp ofappname;
 
@@ -16,12 +11,13 @@ void Jogador::iniciar() {
 	spriteTamX = 76;
 	spriteTamY = 76;
 	posicao.set(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
-	sprite.setAnchorPoint(sprite.getWidth() / 2, sprite.getWidth() / 2);
-	velocidade = 20.f;
+	sprite.setAnchorPoint(0, 0);
+	velocidade.set(0,0);
 	velocidadeAnimacao = 0.7f;
 	frame = 0;
 	totalFrames = 8;
 	direcao = 1;
+	colidiu = false;
 }
 
 
@@ -29,33 +25,26 @@ void Jogador::iniciar() {
 //------------------------------------------------------------------------------------------------
 void Jogador::mover(ofApp::KeyInput teclas, float tempo) {
 	//Aumenta a velocidade de X ou Y ate o maximo de velocidade de acordo com a tecla precionada
-	if (teclas.keyD && (velX < MAXSPEED)) {
-		if (velX < 0)
-			velX = 0;
-		velX += (velocidade) * tempo;
+	if (teclas.keyD && (velocidade.x < MAXSPEED)) {
+		velocidade.x += VELOCIDADE;
 	}
-	if (teclas.keyA && (velX > -MAXSPEED)) {
-		if (velX > 0)
-			velX = 0;
-		velX -= velocidade * tempo;
+	if (teclas.keyA && (velocidade.x > -MAXSPEED)) {
+		velocidade.x -= VELOCIDADE;
 	}
-	if (teclas.keyS && (velY < MAXSPEED)) {
-		if (velY < 0)
-			velX = 0;
-		velY += velocidade * tempo;
+	if (teclas.keyS && (velocidade.y < MAXSPEED)) {
+		velocidade.y += VELOCIDADE;
 	}
-	if (teclas.keyW && (velY > -MAXSPEED)) {
-		if (velY > 0)
-			velY = 0;
-		velY -= velocidade * tempo;
+	if (teclas.keyW && (velocidade.y > -MAXSPEED)) {
+
+		velocidade.y -= VELOCIDADE;
 	}
 
 	//Chama a funcao de atrito para diminuir a velocidade nas direcoes que nao precisa mover 
 	atrito(teclas, tempo);
 
 	//Atualiza a posicao do player
-	posicao.x += velX;
-	posicao.y += velY;
+	 
+	posicao += velocidade * ofGetLastFrameTime();
 
 }
 
@@ -68,28 +57,28 @@ void Jogador::atrito(ofApp::KeyInput teclas, float tempo) {
 	//Diminui a velocidade de X ou Y gradualmente ate chegar em 0, so diminui para nas direcoes que a
 	//tecla nao estiver precionada
 	if (!teclas.keyD && !teclas.keyA) {
-		if (velX > 0) {
-			velX -= (velocidade * FAT_ATRITO) * tempo;
-			if (velX < 0)
-				velX = 0;
+		if (velocidade.x > 0) {
+			velocidade.x -= FAT_ATRITO;
+			if (velocidade.x < 0)
+				velocidade.x = 0;
 		}
-		if (velX < 0) {
-			velX += (velocidade * FAT_ATRITO) * tempo;
-			if (velX > 0)
-				velX = 0;
+		if (velocidade.x < 0) {
+			velocidade.x += FAT_ATRITO;
+			if (velocidade.x > 0)
+				velocidade.x = 0;
 		}
 	}
 
 	if (!teclas.keyW && !teclas.keyS) {
-		if (velY > 0) {
-			velY -= (velocidade * FAT_ATRITO) * tempo;
-			if (velY < 0)
-				velY = 0;
+		if (velocidade.y > 0) {
+			velocidade.y -= FAT_ATRITO;
+			if (velocidade.y < 0)
+				velocidade.y = 0;
 		}
-		if (velY < 0) {
-			velY += (velocidade * FAT_ATRITO) * tempo;
-			if (velY > 0)
-				velY = 0;
+		if (velocidade.y < 0) {
+			velocidade.y += FAT_ATRITO;
+			if (velocidade.y > 0)
+				velocidade.y = 0;
 		}
 	}
 
@@ -128,7 +117,31 @@ void Jogador::animacao(float game_time) {
 								
 	//Trocando o indice de posição do frame do player
 	if (frameTime >= velocidadeAnimacao) {
+		//sprite.setAnchorPoint(spriteTamX * frame, spriteTamY * direcao);
 		frame = (frame + 1) % totalFrames;
 		frameTime = 0;
 	}
+}
+
+void Jogador::desenhar(ofVec2f mund) {
+
+	//sprite.drawSubsection(posicao.x, posicao.y, spriteTamX, spriteTamY, spriteTamX * frame, spriteTamY * direcao);
+	sprite.drawSubsection(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, spriteTamX, spriteTamY, spriteTamX * frame, spriteTamY * direcao);
+	//sprite.drawSubsection(512, 384, spriteTamX, spriteTamY, spriteTamX * frame, spriteTamY * direcao);
+
+}
+
+
+void Jogador::colidiuCom(ofVec2f objeto, ofVec2f& mnd, float raioObj){
+
+
+	if (posicao.distance(objeto + mnd) <= raioObj) {
+		//mnd += objeto - posicao;
+		//posicao =
+		velocidade.set(0, 0);
+		colidiu = true;
+	}
+	else if (posicao.distance(objeto) >= raioObj)
+		colidiu = false;
+
 }

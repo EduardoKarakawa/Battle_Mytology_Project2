@@ -2,16 +2,18 @@
 
 #include "ofApp.h";
 
-#define MAXSPEED 5.f
-#define FAT_ATRITO 0.3f
+#define MAXSPEED 300.f
+#define FAT_ATRITO 8.f
+#define VELOCIDADE 30.f
 
 class Jogador {
 	public:
 		ofImage sprite;
-		ofVec2f posicao;
-		float velX, velY, velocidade, velocidadeAnimacao, frameTime;
+		ofVec2f posicao, velocidade;
+		float velocidadeAnimacao, frameTime;
 		int frame, totalFrames, spriteTamX, spriteTamY, direcao;
 		char action[15];
+		bool colidiu;
 
 
 		void iniciar();
@@ -19,4 +21,6 @@ class Jogador {
 		void atrito(ofApp::KeyInput teclas, float tempo);
 		void animacao(float game_time);
 		void acoes(ofApp::KeyInput teclas);
+		void desenhar(ofVec2f mund);
+		void colidiuCom(ofVec2f objeto, ofVec2f& mnd, float raioObj);
 };

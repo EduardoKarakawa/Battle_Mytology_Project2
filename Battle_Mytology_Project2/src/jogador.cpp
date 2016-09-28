@@ -11,79 +11,12 @@ void Jogador::iniciar() {
 	spriteTamX = 76;
 	spriteTamY = 76;
 	posicao.set(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
-	sprite.setAnchorPoint(0, 0);
-	velocidade.set(0,0);
+	sprite.setAnchorPoint(spriteTamX / 2, spriteTamY / 2);
 	velocidadeAnimacao = 0.7f;
 	frame = 0;
 	totalFrames = 8;
 	direcao = 1;
-	colidiu = false;
 }
-
-
-//---------------- Movimentação do jogador--------------------------------------------------------
-//------------------------------------------------------------------------------------------------
-void Jogador::mover(ofApp::KeyInput teclas, float tempo) {
-	//Aumenta a velocidade de X ou Y ate o maximo de velocidade de acordo com a tecla precionada
-	if (teclas.keyD && (velocidade.x < MAXSPEED)) {
-		velocidade.x += VELOCIDADE;
-	}
-	if (teclas.keyA && (velocidade.x > -MAXSPEED)) {
-		velocidade.x -= VELOCIDADE;
-	}
-	if (teclas.keyS && (velocidade.y < MAXSPEED)) {
-		velocidade.y += VELOCIDADE;
-	}
-	if (teclas.keyW && (velocidade.y > -MAXSPEED)) {
-
-		velocidade.y -= VELOCIDADE;
-	}
-
-	//Chama a funcao de atrito para diminuir a velocidade nas direcoes que nao precisa mover 
-	atrito(teclas, tempo);
-
-	//Atualiza a posicao do player
-	 
-	posicao += velocidade * ofGetLastFrameTime();
-
-}
-
-
-
-//---------------- Atrito de movimentação do jogador----------------------------------------------
-//------------------------------------------------------------------------------------------------
-void Jogador::atrito(ofApp::KeyInput teclas, float tempo) {
-
-	//Diminui a velocidade de X ou Y gradualmente ate chegar em 0, so diminui para nas direcoes que a
-	//tecla nao estiver precionada
-	if (!teclas.keyD && !teclas.keyA) {
-		if (velocidade.x > 0) {
-			velocidade.x -= FAT_ATRITO;
-			if (velocidade.x < 0)
-				velocidade.x = 0;
-		}
-		if (velocidade.x < 0) {
-			velocidade.x += FAT_ATRITO;
-			if (velocidade.x > 0)
-				velocidade.x = 0;
-		}
-	}
-
-	if (!teclas.keyW && !teclas.keyS) {
-		if (velocidade.y > 0) {
-			velocidade.y -= FAT_ATRITO;
-			if (velocidade.y < 0)
-				velocidade.y = 0;
-		}
-		if (velocidade.y < 0) {
-			velocidade.y += FAT_ATRITO;
-			if (velocidade.y > 0)
-				velocidade.y = 0;
-		}
-	}
-
-}
-
 
 
 //---------------- Acoes do jogador---------------------------------------------------------------
@@ -117,31 +50,29 @@ void Jogador::animacao(float game_time) {
 								
 	//Trocando o indice de posição do frame do player
 	if (frameTime >= velocidadeAnimacao) {
-		//sprite.setAnchorPoint(spriteTamX * frame, spriteTamY * direcao);
 		frame = (frame + 1) % totalFrames;
 		frameTime = 0;
 	}
 }
 
+
+//---------------- Desenhar o jogador-------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
 void Jogador::desenhar(ofVec2f mund) {
 
-	//sprite.drawSubsection(posicao.x, posicao.y, spriteTamX, spriteTamY, spriteTamX * frame, spriteTamY * direcao);
 	sprite.drawSubsection(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, spriteTamX, spriteTamY, spriteTamX * frame, spriteTamY * direcao);
-	//sprite.drawSubsection(512, 384, spriteTamX, spriteTamY, spriteTamX * frame, spriteTamY * direcao);
 
 }
 
 
-void Jogador::colidiuCom(ofVec2f objeto, ofVec2f& mnd, float raioObj){
+//---------------- Colisao do jogador-------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+void Jogador::colidiuCom(ofVec2f objeto, ofVec2f& mnd, ofVec2f& vel, float raioObj){
+	//Verifica se o jogador colidiu com um determinado objeto e realiza uma subtracao de 
+	//vetor de posicao do (objeto + mundo) - player para fazer aumentar a velocidade 
+	//contraria da movimentacao do mundo
 
-
-	if (posicao.distance(objeto + mnd) <= raioObj) {
-		//mnd += objeto - posicao;
-		//posicao =
-		velocidade.set(0, 0);
-		colidiu = true;
+	if (posicao.distance((objeto + mnd)) <= raioObj + spriteTamX / 2) {
+		vel = -((mnd + objeto) - posicao) / 4.f; //Divide por 4 para diminuir a tremedeira
 	}
-	else if (posicao.distance(objeto) >= raioObj)
-		colidiu = false;
-
 }

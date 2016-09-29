@@ -35,9 +35,6 @@ void ofApp::update(){
 		player.colidiuCom(v, mundo.posicao, mundo.velocidade, 150);
 
 	//Controlando o player
-		
-		/*player.mover(teclado, gameTime);
-		player.atrito(teclado, gameTime);*/
 		player.animacao(gameTime);
 		player.acoes(teclado);
 
@@ -51,10 +48,7 @@ void ofApp::update(){
 void ofApp::draw(){
 	
 	mundo.desenhar();
-	std::cout << "x " << mundo.posicao.x << " y " << mundo.posicao.y << "     " << mundo.posicao + v << std::endl;
 	ofDrawCircle(mundo.posicao + v, 150);
-	ofSetColor(255, 0, 0);
-	ofDrawLine(mundo.posicao + v, mundo.posicao + v + 150);
 	ofSetColor(255, 255, 255);
 	player.desenhar(mundo.posicao);
 	

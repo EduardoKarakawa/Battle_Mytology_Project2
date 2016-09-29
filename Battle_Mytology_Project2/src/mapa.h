@@ -14,7 +14,6 @@ class Mapa {
 
 		
 		void iniciar(float x, float y);
-		//void mover(ofVec2f direcao);
 		void mover(ofApp::KeyInput teclas);
 		void atrito(ofApp::KeyInput teclas);
 		void desenhar();

@@ -175,12 +175,14 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\inimigo.cpp" />
     <ClCompile Include="src\jogador.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapa.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\inimigo.h" />
     <ClInclude Include="src\jogador.h" />
     <ClInclude Include="src\mapa.h" />
     <ClInclude Include="src\ofApp.h" />

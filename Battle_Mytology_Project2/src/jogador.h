@@ -6,11 +6,13 @@
 #define FAT_ATRITO 8.f
 #define VELOCIDADE 30.f
 
+#define VELOCIDADE_ANIMACAO 0.7f
+
 class Jogador {
 	public:
 		ofImage sprite;
 		ofVec2f posicao;
-		float velocidadeAnimacao, frameTime;
+		float frameTime;
 		int frame, totalFrames, spriteTamX, spriteTamY, direcao;
 		char action[15];
 

@@ -3,8 +3,10 @@
 
 #include "jogador.h"
 #include "mapa.h"
+#include "inimigo.h"
 
 Jogador player;
+Inimigo inimigo;
 Mapa mundo;
 ofVec2f v;
 
@@ -20,6 +22,7 @@ void ofApp::setup(){
 	//Inicializando o Player
 	player.iniciar();
 
+	inimigo.iniciar(800,300);
 	
 	v.set(278, 197);
 }
@@ -33,13 +36,19 @@ void ofApp::update(){
 
 		
 		player.colidiuCom(v, mundo.posicao, mundo.velocidade, 150);
+		player.colidiuCom(inimigo.posicao, mundo.posicao, mundo.velocidade, inimigo.spriteTamX / 2.f);
 
+		inimigo.animar(gameTime);
+		inimigo.mover(player.posicao, mundo.posicao);
 	//Controlando o player
 		player.animacao(gameTime);
 		player.acoes(teclado);
 
 	//Controlando o Mundo
 		mundo.mover(teclado);
+
+
+		
 }
 
 
@@ -51,7 +60,7 @@ void ofApp::draw(){
 	ofDrawCircle(mundo.posicao + v, 150);
 	ofSetColor(255, 255, 255);
 	player.desenhar(mundo.posicao);
-	
+	inimigo.desenhar(mundo.posicao);
 
 }
 

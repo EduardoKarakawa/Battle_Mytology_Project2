@@ -7,12 +7,11 @@ ofApp ofappname;
 void Jogador::iniciar() {
 	//Funcao para iniciar os parametros do Jogador 
 	strcpy(action, "iddle");
-	sprite.loadImage("iddle.png");
+	sprite.loadImage("jogador/iddle.png");
 	spriteTamX = 76;
 	spriteTamY = 76;
 	posicao.set(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
 	sprite.setAnchorPoint(spriteTamX / 2, spriteTamY / 2);
-	velocidadeAnimacao = 0.7f;
 	frame = 0;
 	totalFrames = 8;
 	direcao = 1;
@@ -31,11 +30,11 @@ void Jogador::acoes(ofApp::KeyInput teclas) {
 
 	//Verificando se esta parado
 	if (!teclas.keyA && !teclas.keyD && !teclas.keyW && !teclas.keyS)
-		sprite.loadImage("iddle.png");
+		sprite.loadImage("jogador/iddle.png");
 
 	//Verificando se esta andando
 	else if (teclas.keyA || teclas.keyD || teclas.keyW || teclas.keyS){
-		sprite.loadImage("andando.png");
+		sprite.loadImage("jogador/andando.png");
 	}
 		
 
@@ -49,7 +48,7 @@ void Jogador::animacao(float game_time) {
 	frameTime += game_time; //Fazendo contagem de tempo
 								
 	//Trocando o indice de posição do frame do player
-	if (frameTime >= velocidadeAnimacao) {
+	if (frameTime >= VELOCIDADE_ANIMACAO) {
 		frame = (frame + 1) % totalFrames;
 		frameTime = 0;
 	}
@@ -73,6 +72,6 @@ void Jogador::colidiuCom(ofVec2f objeto, ofVec2f& mnd, ofVec2f& vel, float raioO
 	//contraria da movimentacao do mundo
 
 	if (posicao.distance((objeto + mnd)) <= raioObj + spriteTamX / 2) {
-		vel = -((mnd + objeto) - posicao) / 4.f; //Divide por 4 para diminuir a tremedeira
+		vel = -((mnd + objeto) - posicao) / 2.f; //Divide por 4 para diminuir a tremedeira
 	}
 }

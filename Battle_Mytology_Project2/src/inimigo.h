@@ -15,6 +15,7 @@ class Inimigo {
 		float m_velocidadeAnimacao, m_frameTime;
 		int m_frame, m_totalFrames, m_spriteTamX, m_spriteTamY, m_direcao;
 		bool m_seguirJogador;
+		int m_vida;
 
 
 		void iniciar(int x, int y);

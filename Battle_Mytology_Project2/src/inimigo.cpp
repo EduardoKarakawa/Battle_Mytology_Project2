@@ -17,6 +17,7 @@ void Inimigo::iniciar(int x, int y){
 	m_frame = 0;
 	m_totalFrames = 8;
 	m_seguirJogador = false;
+	m_vida = 10;
 
 }
 

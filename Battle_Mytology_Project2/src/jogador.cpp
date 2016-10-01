@@ -72,6 +72,6 @@ void Jogador::colidiuCom(ofVec2f objeto, ofVec2f& mnd, ofVec2f& vel, float raioO
 	//contraria da movimentacao do mundo
 
 	if (posicao.distance((objeto + mnd)) <= raioObj + spriteTamX / 2) {
-		vel = -((mnd + objeto) - posicao) / 2.f; //Divide por 4 para diminuir a tremedeira
+		vel = -((mnd + objeto) - posicao); //Divide por 4 para diminuir a tremedeira
 	}
 }

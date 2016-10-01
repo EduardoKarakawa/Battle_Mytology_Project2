@@ -36,10 +36,11 @@ void ofApp::update(){
 
 		
 		player.colidiuCom(v, mundo.posicao, mundo.velocidade, 150);
-		player.colidiuCom(inimigo.posicao, mundo.posicao, mundo.velocidade, inimigo.spriteTamX / 2.f);
+		player.colidiuCom(inimigo.m_posicao, mundo.posicao, mundo.velocidade, inimigo.m_spriteTamX / 2.f);
 
 		inimigo.animar(gameTime);
-		inimigo.mover(player.posicao, mundo.posicao);
+		inimigo.mover(player.posicao, mundo.posicao, player.spriteTamX);
+
 	//Controlando o player
 		player.animacao(gameTime);
 		player.acoes(teclado);

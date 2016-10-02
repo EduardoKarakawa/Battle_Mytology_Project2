@@ -13,14 +13,14 @@ class Inimigo {
 		ofVec2f m_posicao, m_velocidade;
 		ofImage m_sprite;
 		float m_velocidadeAnimacao, m_frameTime;
-		int m_frame, m_totalFrames, m_spriteTamX, m_spriteTamY, m_direcao;
+		int m_frame, m_totalFrames, m_spriteTamX, m_spriteTamY, m_direcao, m_dano;
 		bool m_seguirJogador;
 		int m_vida;
 
 
-		void iniciar(int x, int y);
+		void iniciar(int x, int y, ofVec2f mund);
 		void mover(ofVec2f posJogador, ofVec2f mund, float tam);
-		void levardano(ofVec2f player, ofApp::KeyInput teclas);
+		void levardano(ofVec2f player, ofVec2f mund, float tamArea, ofApp::KeyInput teclas);
 		void atacar();
 		void animar(float game_time);
 		void colidiuCom(Inimigo inim[2], ofVec2f mund, int id);

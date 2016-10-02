@@ -6,7 +6,7 @@
 
 //---------------- Inicializando o inimigo -------------------------------------------------------
 //------------------------------------------------------------------------------------------------
-void Inimigo::iniciar(int x, int y){
+void Inimigo::iniciar(int x, int y, ofVec2f mund){
 	srand(time(NULL));
 
 	m_sprite.load("inimigo/inimigo.png");
@@ -17,7 +17,7 @@ void Inimigo::iniciar(int x, int y){
 	m_frame = 0;
 	m_totalFrames = 8;
 	m_seguirJogador = false;
-	m_vida = 10;
+	m_vida = 50;
 
 }
 
@@ -42,18 +42,18 @@ void Inimigo::mover(ofVec2f posJogador, ofVec2f mund, float tam) {
 
 //---------------- Levar Dano --------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
-void Inimigo::levardano(ofVec2f player, ofApp::KeyInput teclas){
-	float tmp_angle = getAngulo(player.normalized());
+void Inimigo::levardano(ofVec2f player, ofVec2f mund,float tamArea, ofApp::KeyInput teclas) {
+	//float tmp_angle = getAngulo(player.normalized());
+	m_dano = 0;
 
-	std::cout << tmp_angle << std::endl;
-	m_direcao = teclas.keyUp && ((tmp_angle > 45) && (tmp_angle < 135)) ? 4 : m_direcao;
-	m_direcao = teclas.keyDown && ((tmp_angle > -135) && (tmp_angle < -45)) ? 5 : m_direcao;
-	m_direcao = teclas.keyLeft && ((tmp_angle > -45) && (tmp_angle < 45)) ? 6 : m_direcao;
-	m_direcao = teclas.keyRight && ((tmp_angle > 135) || (tmp_angle < -135)) ? 7 : m_direcao;
-
-
-	m_vida = m_direcao > 3 ? m_vida-- : m_vida;
-		
+	if (player.distance(m_posicao + mund) <= tamArea + m_spriteTamX) {
+		m_dano = (teclas.keyUp && (player.y  > m_posicao.y + mund.y)) ? 4 :
+		(teclas.keyDown && (player.y  < m_posicao.y + mund.y)) ? 4 :
+		(teclas.keyLeft && (player.x  > m_posicao.x + mund.x)) ? 4 :
+		(teclas.keyRight && (player.x  < m_posicao.x + mund.x)) ? 4 : m_dano;
+	}
+	
+	m_vida = m_dano != 0 ? m_vida-1 : m_vida;
 }
 
 
@@ -102,7 +102,7 @@ void Inimigo::direcao(ofVec2f player, ofVec2f mund) {
 //------------------------------------------------------------------------------------------------
 void Inimigo::desenhar(ofVec2f mund) {
 
-	m_sprite.drawSubsection(m_posicao.x + mund.x, m_posicao.y + mund.y, m_spriteTamX, m_spriteTamY, m_spriteTamX * m_frame, m_spriteTamY * m_direcao);
+	m_sprite.drawSubsection(m_posicao.x + mund.x, m_posicao.y + mund.y, m_spriteTamX, m_spriteTamY, m_spriteTamX * m_frame, m_spriteTamY * (m_direcao + m_dano));
 
 }
 

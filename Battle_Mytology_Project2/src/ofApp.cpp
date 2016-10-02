@@ -22,8 +22,8 @@ void ofApp::setup(){
 	//Inicializando o Player
 	player.iniciar();
 
-	inimigo[0].iniciar(800,300);
-	inimigo[1].iniciar(100, 800);
+	inimigo[0].iniciar(800,300, mundo.posicao);
+	inimigo[1].iniciar(100, 800, mundo.posicao);
 	
 	v.set(278, 197);
 }
@@ -39,11 +39,12 @@ void ofApp::update(){
 		player.colidiuCom(v, mundo.posicao, mundo.velocidade, 150);
 		for (int i = 0; i < 2; i++) {
 			player.colidiuCom(inimigo[i].m_posicao, mundo.posicao, mundo.velocidade, inimigo[i].m_spriteTamX / 2.f);
-
-			inimigo[i].animar(gameTime);
-			inimigo[i].colidiuCom(inimigo, mundo.posicao, i);
-			inimigo[i].mover(player.posicao, mundo.posicao, player.spriteTamX);
-			inimigo[i].levardano(mundo.posicao +player.posicao, teclado);
+			if (inimigo[i].m_vida > 0) {
+				inimigo[i].animar(gameTime);
+				inimigo[i].colidiuCom(inimigo, mundo.posicao, i);
+				inimigo[i].mover(player.m_posicao, mundo.posicao, player.m_spriteTamX);
+				inimigo[i].levardano(player.m_posicao, mundo.posicao, player.m_spriteTamX, teclado);
+			}
 		}
 	//Controlando o player
 		player.animacao(gameTime);
@@ -65,8 +66,10 @@ void ofApp::draw(){
 	ofDrawCircle(mundo.posicao + v, 150);
 	ofSetColor(255, 255, 255);
 	player.desenhar(mundo.posicao);
-	inimigo[0].desenhar(mundo.posicao);
-	inimigo[1].desenhar(mundo.posicao);
+	for (int i = 0; i < 2; i++) {
+		if(inimigo[i].m_vida > 0)
+		 inimigo[i].desenhar(mundo.posicao);
+	}
 }
 
 

@@ -10,11 +10,11 @@
 
 class Jogador {
 	public:
-		ofImage sprite;
-		ofVec2f posicao;
-		float frameTime;
-		int frame, totalFrames, spriteTamX, spriteTamY, direcao;
-		char action[15];
+		ofImage m_sprite;
+		ofVec2f m_posicao;
+		float m_frameTime;
+		int m_frame, m_totalFrames, m_spriteTamX, m_spriteTamY, m_direcao;
+		char m_action[15];
 
 
 		void iniciar();
@@ -22,4 +22,6 @@ class Jogador {
 		void acoes(ofApp::KeyInput teclas);
 		void desenhar(ofVec2f mund);
 		void colidiuCom(ofVec2f objeto, ofVec2f& mnd, ofVec2f& vel, float raioObj);
+		int getAngulo(ofVec2f pos, ofVec2f mund);
+		void atacar(ofVec2f inimi, float tam, ofApp::KeyInput tecla);
 };

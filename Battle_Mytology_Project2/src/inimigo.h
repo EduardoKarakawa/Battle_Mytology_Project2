@@ -20,11 +20,12 @@ class Inimigo {
 
 		void iniciar(int x, int y);
 		void mover(ofVec2f posJogador, ofVec2f mund, float tam);
-		void levardano();
+		void levardano(ofVec2f player, ofApp::KeyInput teclas);
 		void atacar();
 		void animar(float game_time);
 		void colidiuCom(Inimigo inim[2], ofVec2f mund, int id);
 		void desenhar(ofVec2f mund);
 		void direcao(ofVec2f player, ofVec2f mund);
 		bool seguir(ofVec2f player, ofVec2f mund);
+		float getAngulo(ofVec2f pos);
 };

@@ -43,6 +43,7 @@ void ofApp::update(){
 			inimigo[i].animar(gameTime);
 			inimigo[i].colidiuCom(inimigo, mundo.posicao, i);
 			inimigo[i].mover(player.posicao, mundo.posicao, player.spriteTamX);
+			inimigo[i].levardano(mundo.posicao +player.posicao, teclado);
 		}
 	//Controlando o player
 		player.animacao(gameTime);

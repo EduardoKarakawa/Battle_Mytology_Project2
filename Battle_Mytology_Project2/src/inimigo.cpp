@@ -42,9 +42,18 @@ void Inimigo::mover(ofVec2f posJogador, ofVec2f mund, float tam) {
 
 //---------------- Levar Dano --------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
-void Inimigo::levardano(){
+void Inimigo::levardano(ofVec2f player, ofApp::KeyInput teclas){
+	float tmp_angle = getAngulo(player.normalized());
+
+	std::cout << tmp_angle << std::endl;
+	m_direcao = teclas.keyUp && ((tmp_angle > 45) && (tmp_angle < 135)) ? 4 : m_direcao;
+	m_direcao = teclas.keyDown && ((tmp_angle > -135) && (tmp_angle < -45)) ? 5 : m_direcao;
+	m_direcao = teclas.keyLeft && ((tmp_angle > -45) && (tmp_angle < 45)) ? 6 : m_direcao;
+	m_direcao = teclas.keyRight && ((tmp_angle > 135) || (tmp_angle < -135)) ? 7 : m_direcao;
 
 
+	m_vida = m_direcao > 3 ? m_vida-- : m_vida;
+		
 }
 
 
@@ -77,11 +86,8 @@ void Inimigo::animar(float game_time) {
 //------------------------------------------------------------------------------------------------
 void Inimigo::direcao(ofVec2f player, ofVec2f mund) {
 
-	ofVec2f tpm_prox_posicao;
-	tpm_prox_posicao = m_posicao + m_velocidade; //Posicao atual mais a velocidade igual a proxima posicao
-
 	//Encontrando o angulo de direcao do inimigo
-	float tmp_dirc = atan2f(m_posicao.y - tpm_prox_posicao.y, m_posicao.x - tpm_prox_posicao.x) * 180 / 3.14;
+	float tmp_dirc = getAngulo(m_velocidade);
 
 	//Mudando a direcao de acordo com o agulo de direcao
 	m_direcao = ((tmp_dirc > -45) && (tmp_dirc < 45)) ? 0 : m_direcao;
@@ -114,9 +120,16 @@ void Inimigo::colidiuCom(Inimigo inim[2], ofVec2f mund, int id) {
 			float tmp_dist = inim[i].m_posicao.distance(m_posicao);
 			if (tmp_dist <= (inim[i].m_spriteTamX + m_spriteTamX) / 2.f) {
 				ofVec2f tmp;
-				tmp = (inim[i].m_posicao - m_posicao) / 2.f;
+				tmp = (inim[i].m_posicao - m_posicao) *0.52f;
 				m_posicao -= (VELOCIDADE * ofGetLastFrameTime()) * tmp.normalized();
 			}
 		}
 	}
+}
+
+float Inimigo::getAngulo(ofVec2f pos) {
+
+	ofVec2f tpm_prox_posicao;
+	tpm_prox_posicao = m_posicao + pos; //Posicao atual mais a velocidade igual a proxima posicao
+	return atan2f(m_posicao.y - tpm_prox_posicao.y, m_posicao.x - tpm_prox_posicao.x) * 180 / 3.14;
 }

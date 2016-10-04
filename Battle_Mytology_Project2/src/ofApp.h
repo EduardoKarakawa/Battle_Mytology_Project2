@@ -1,14 +1,5 @@
 #pragma once
 
-/*------------------------------------------------------------------------------------
---------------------------------------------------------------------------------------
-	BAIXAR A PASTA data E COLOCAR NA PASTA bin DO PROJETO DO JOGO
-						IMAGENS SALVAS NO LINK:
-	https://drive.google.com/open?id=0B6XvM4xHn2qgbm5YbzR5TUtVZWM
-
---------------------------------------------------------------------------------------
-------------------------------------------------------------------------------------*/
-
 
 #include "ofMain.h"
 
@@ -40,7 +31,7 @@ class ofApp : public ofBaseApp{
 			bool keyA, keyD;
 		};
 		
-				
+	
 	
 		float before, gameTime;
 		KeyInput teclado;

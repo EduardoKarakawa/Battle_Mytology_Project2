@@ -12,6 +12,7 @@
     </ClCompile>
     <ClCompile Include="src\mapa.cpp" />
     <ClCompile Include="src\inimigo.cpp" />
+    <ClCompile Include="src\som.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -30,6 +31,7 @@
     </ClInclude>
     <ClInclude Include="src\mapa.h" />
     <ClInclude Include="src\inimigo.h" />
+    <ClInclude Include="src\som.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

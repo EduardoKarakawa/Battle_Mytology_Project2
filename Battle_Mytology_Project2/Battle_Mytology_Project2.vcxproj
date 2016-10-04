@@ -180,12 +180,14 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\mapa.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\som.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\inimigo.h" />
     <ClInclude Include="src\jogador.h" />
     <ClInclude Include="src\mapa.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\som.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "jogador.h"
+#include <time.h>
+
 
 ofApp ofappname;
 
@@ -8,6 +10,7 @@ void Jogador::iniciar() {
 	//Funcao para iniciar os parametros do Jogador 
 	strcpy(m_action, "iddle");
 	m_sprite.loadImage("jogador/iddle.png");
+	m_espada.loadImage("jogador/espada.png");
 	m_spriteTamX = 76;
 	m_spriteTamY = 76;
 	m_posicao.set(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
@@ -15,6 +18,8 @@ void Jogador::iniciar() {
 	m_frame = 0;
 	m_totalFrames = 8;
 	m_direcao = 1;
+	m_atakou = false;
+	m_procurado = false;
 }
 
 
@@ -23,11 +28,15 @@ void Jogador::iniciar() {
 void Jogador::acoes(ofApp::KeyInput teclas) {
 	//Definindo a direcao pela tecla que estiver precionada, se nao tiver nenhuma 
 	//sera definido a ultima tecla precionada
-	m_direcao = teclas.keyA ? 0 : m_direcao;
-	m_direcao = teclas.keyW ? 1 : m_direcao;
-	m_direcao = teclas.keyD ? 2 : m_direcao;
-	m_direcao = teclas.keyS ? 3 : m_direcao;
-
+	m_direcao = teclas.keyA ? 0 : 
+	teclas.keyW ? 1 : 
+	teclas.keyD ? 2 :
+	teclas.keyS ? 3 :
+	teclas.keyLeft ? 0 : 
+	teclas.keyUp ? 1:
+	teclas.keyRight ? 2 :
+	teclas.keyDown ? 3 : m_direcao;
+	
 	//Verificando se esta parado
 	if (!teclas.keyA && !teclas.keyD && !teclas.keyW && !teclas.keyS)
 		m_sprite.loadImage("jogador/iddle.png");
@@ -57,8 +66,37 @@ void Jogador::animacao(float game_time) {
 
 //---------------- Desenhar o jogador-------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
-void Jogador::desenhar(ofVec2f mund) {
-
+void Jogador::desenhar(ofApp::KeyInput tecla) {
+	int tmp_w = 0, tmp_h = 0;
+	ofPoint tmp_point;
+	tmp_point.set(0, 0);
+	if (m_atakou) {
+		if (tecla.keyLeft) {
+			tmp_w = -80;
+			tmp_h = 160;
+			tmp_point.set(80, 80);
+			m_espada.setAnchorPoint(0, 80);
+		}
+		else if (tecla.keyUp) {
+			tmp_w = 160;
+			tmp_h = 80;
+			tmp_point.set(0, 0);
+			m_espada.setAnchorPoint(80,80);
+		}
+		else if (tecla.keyRight) {
+			tmp_w = 80;
+			tmp_h = 160;
+			tmp_point.set(160, 0);
+			m_espada.setAnchorPoint(0, 80);
+		}
+		else if (tecla.keyDown) {
+			tmp_w = 160;
+			tmp_h = 80;
+			tmp_point.set(80, 160);
+			m_espada.setAnchorPoint(80, 0);
+		}
+		m_espada.drawSubsection(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, tmp_w, tmp_h, tmp_point.x , tmp_point.y);
+	}
 	m_sprite.drawSubsection(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, m_spriteTamX, m_spriteTamY, m_spriteTamX * m_frame, m_spriteTamY * m_direcao);
 
 }
@@ -88,6 +126,13 @@ int Jogador::getAngulo(ofVec2f pos, ofVec2f mund) {
 	//return atan2f(tmp_prox_posicao.y - m_posicao.y, tmp_prox_posicao.x - m_posicao.x) * 180 / 3.14;
 }
 
-void Jogador::atacar(ofVec2f inimi, float tam, ofApp::KeyInput tecla) {
+void Jogador::atacar(ofApp::KeyInput tecla, Som tmp_som) {
+	if ((tecla.keyUp || tecla.keyDown || tecla.keyLeft || tecla.keyRight) && (m_atakeTime <= 0)) {
+		tmp_som.JogadorAtakeEspada();
+		m_atakou = true;
+	}
+
+		m_atakeTime = m_atakou && (m_atakeTime < TEMPO_ATAQUE) ? m_atakeTime + ofGetLastFrameTime() : 0;
+		m_atakou = m_atakeTime <= 0 ? false : m_atakou;
 
 }

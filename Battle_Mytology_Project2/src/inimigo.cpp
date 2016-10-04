@@ -17,7 +17,9 @@ void Inimigo::iniciar(int x, int y, ofVec2f mund){
 	m_frame = 0;
 	m_totalFrames = 8;
 	m_seguirJogador = false;
-	m_vida = 50;
+	m_vida = 10;
+	m_stunTime = 0;
+
 
 }
 
@@ -26,7 +28,8 @@ void Inimigo::iniciar(int x, int y, ofVec2f mund){
 //---------------- Movimentacao do inimigo -------------------------------------------------------
 //------------------------------------------------------------------------------------------------
 void Inimigo::mover(ofVec2f posJogador, ofVec2f mund, float tam) {
-	if (seguir(posJogador, mund)) {
+	m_stunTime = m_stunTime >= 0 ? m_stunTime - ofGetLastFrameTime() : 0;
+	if (seguir(posJogador, mund) && (m_stunTime <= 0)) {
 
 		m_velocidade = (posJogador - mund) - m_posicao;
 
@@ -42,15 +45,15 @@ void Inimigo::mover(ofVec2f posJogador, ofVec2f mund, float tam) {
 
 //---------------- Levar Dano --------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
-void Inimigo::levardano(ofVec2f player, ofVec2f mund,float tamArea, ofApp::KeyInput teclas) {
-	//float tmp_angle = getAngulo(player.normalized());
+void Inimigo::levardano(ofVec2f player, ofVec2f mund,float tamArea, ofApp::KeyInput teclas, bool levadano, Som tmp_som) {
 	m_dano = 0;
-
-	if (player.distance(m_posicao + mund) <= tamArea + m_spriteTamX) {
+	if (levadano && (player.distance(m_posicao + mund) <= tamArea + m_spriteTamX)) {
 		m_dano = (teclas.keyUp && (player.y  > m_posicao.y + mund.y)) ? 4 :
 		(teclas.keyDown && (player.y  < m_posicao.y + mund.y)) ? 4 :
 		(teclas.keyLeft && (player.x  > m_posicao.x + mund.x)) ? 4 :
 		(teclas.keyRight && (player.x  < m_posicao.x + mund.x)) ? 4 : m_dano;
+		tmp_som.InimigoLevaDano();
+		m_stunTime = STUN_TIME;
 	}
 	
 	m_vida = m_dano != 0 ? m_vida-1 : m_vida;
@@ -101,8 +104,8 @@ void Inimigo::direcao(ofVec2f player, ofVec2f mund) {
 //---------------- Desenhar o inimigo-------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
 void Inimigo::desenhar(ofVec2f mund) {
-
-	m_sprite.drawSubsection(m_posicao.x + mund.x, m_posicao.y + mund.y, m_spriteTamX, m_spriteTamY, m_spriteTamX * m_frame, m_spriteTamY * (m_direcao + m_dano));
+	int tmp = m_stunTime > 0 ? 4 : 0;
+	m_sprite.drawSubsection(m_posicao.x + mund.x, m_posicao.y + mund.y, m_spriteTamX, m_spriteTamY, m_spriteTamX * m_frame, m_spriteTamY * (m_direcao + tmp));
 
 }
 
@@ -116,7 +119,7 @@ bool Inimigo::seguir(ofVec2f player, ofVec2f mund) {
 
 void Inimigo::colidiuCom(Inimigo inim[2], ofVec2f mund, int id) {
 	for (int i = 0; i < 2; i++) {
-		if (i != id) {
+		if ((i != id) && (inim[i].m_vida > 0)) {
 			float tmp_dist = inim[i].m_posicao.distance(m_posicao);
 			if (tmp_dist <= (inim[i].m_spriteTamX + m_spriteTamX) / 2.f) {
 				ofVec2f tmp;

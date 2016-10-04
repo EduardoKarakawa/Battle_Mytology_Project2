@@ -4,11 +4,13 @@
 #include "jogador.h"
 #include "mapa.h"
 #include "inimigo.h"
+#include "som.h"
 
 Jogador player;
 Inimigo inimigo[2];
 Mapa mundo;
 ofVec2f v;
+Som sons;
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -25,7 +27,10 @@ void ofApp::setup(){
 	inimigo[0].iniciar(800,300, mundo.posicao);
 	inimigo[1].iniciar(100, 800, mundo.posicao);
 	
+
+	sons.iniciar();
 	v.set(278, 197);
+
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -38,22 +43,30 @@ void ofApp::update(){
 		
 		player.colidiuCom(v, mundo.posicao, mundo.velocidade, 150);
 		for (int i = 0; i < 2; i++) {
-			player.colidiuCom(inimigo[i].m_posicao, mundo.posicao, mundo.velocidade, inimigo[i].m_spriteTamX / 2.f);
 			if (inimigo[i].m_vida > 0) {
+				player.colidiuCom(inimigo[i].m_posicao, mundo.posicao, mundo.velocidade, inimigo[i].m_spriteTamX / 2.f);
+			
 				inimigo[i].animar(gameTime);
 				inimigo[i].colidiuCom(inimigo, mundo.posicao, i);
 				inimigo[i].mover(player.m_posicao, mundo.posicao, player.m_spriteTamX);
-				inimigo[i].levardano(player.m_posicao, mundo.posicao, player.m_spriteTamX, teclado);
+				inimigo[i].levardano(player.m_posicao, mundo.posicao, player.m_spriteTamX, teclado, (player.m_atakeTime <= ofGetLastFrameTime()) && player.m_atakou, sons);
+				player.m_procurado = inimigo[i].seguir(player.m_posicao, mundo.posicao);
 			}
 		}
+
+		sons.AmbienteBatalha(player.m_procurado);
+		sons.AmbientePacifico(player.m_procurado);
+		std::cout << std::endl;
+
 	//Controlando o player
 		player.animacao(gameTime);
 		player.acoes(teclado);
+		player.atacar(teclado, sons);
 
 	//Controlando o Mundo
-		mundo.mover(teclado);
+		mundo.mover(teclado, sons);
 
-
+		
 		
 }
 
@@ -65,11 +78,11 @@ void ofApp::draw(){
 	mundo.desenhar();
 	ofDrawCircle(mundo.posicao + v, 150);
 	ofSetColor(255, 255, 255);
-	player.desenhar(mundo.posicao);
 	for (int i = 0; i < 2; i++) {
 		if(inimigo[i].m_vida > 0)
 		 inimigo[i].desenhar(mundo.posicao);
 	}
+	player.desenhar(teclado);
 }
 
 
@@ -113,12 +126,16 @@ void ofApp::keyReleased(int key){
 
 	//Inputs de ataque
 	if (key == OF_KEY_UP)
+		player.m_direcaoAtaque = 1;
 		teclado.keyUp = false;
 	if (key == OF_KEY_DOWN)
+		player.m_direcaoAtaque = 3;
 		teclado.keyDown = false;
 	if (key == OF_KEY_LEFT)
+		player.m_direcaoAtaque = 0;
 		teclado.keyLeft = false;
 	if (key == OF_KEY_RIGHT)
+		player.m_direcaoAtaque = 2;
 		teclado.keyRight = false;
 }
 

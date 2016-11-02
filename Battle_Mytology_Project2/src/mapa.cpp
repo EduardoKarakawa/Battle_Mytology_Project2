@@ -75,3 +75,7 @@ void Mapa::atrito(ofApp::KeyInput teclas) {
 	}
 
 }
+
+Mapa::~Mapa() {
+
+}

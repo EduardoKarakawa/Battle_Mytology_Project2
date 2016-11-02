@@ -136,3 +136,6 @@ float Inimigo::getAngulo(ofVec2f pos) {
 	tpm_prox_posicao = m_posicao + pos; //Posicao atual mais a velocidade igual a proxima posicao
 	return atan2f(m_posicao.y - tpm_prox_posicao.y, m_posicao.x - tpm_prox_posicao.x) * 180 / 3.14;
 }
+
+Inimigo::~Inimigo() {
+}

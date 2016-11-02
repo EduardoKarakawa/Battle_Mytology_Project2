@@ -6,7 +6,7 @@
 
 #define MAX_AREA 500
 #define VELOCIDADE_ANIMACAO 0.7f
-#define VELOCIDADE 100.f
+#define VELOCIDADE 80.f
 #define CAMPO_VISAO 1200.f
 #define STUN_TIME 0.17f
 
@@ -32,4 +32,6 @@ public:
 		void direcao(ofVec2f player, ofVec2f mund);
 		bool seguir(ofVec2f player, ofVec2f mund);
 		float getAngulo(ofVec2f pos);
+
+		~Inimigo();
 };

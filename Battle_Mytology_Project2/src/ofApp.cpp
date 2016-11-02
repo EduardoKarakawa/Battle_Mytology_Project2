@@ -9,27 +9,69 @@
 Jogador player;
 Inimigo inimigo[2];
 Mapa mundo;
-ofVec2f v;
-Som sons;
+Som sons; 
+ofVec2f paredeInv[41];
+
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::setup(){
 	//Iniciando contagem de tempo de execução
 	before = ofGetElapsedTimef();
-
+	sons.iniciar();
 	//Iniciando o Mundo
-	mundo.iniciar(0,0);
+	mundo.iniciar(-750 + ofGetWidth() / 2.f, -1200 + ofGetHeight() / 2.f);
 
 	//Inicializando o Player
-	player.iniciar();
+	
 
 	inimigo[0].iniciar(800,300, mundo.posicao);
 	inimigo[1].iniciar(100, 800, mundo.posicao);
 	
+	player.iniciar();
 
-	sons.iniciar();
-	v.set(278, 197);
+	paredeInv[0].set(748, 1419);
+	paredeInv[1].set(638, 1417);
+	paredeInv[2].set(538, 1393);
+	paredeInv[3].set(438, 1319);
+	paredeInv[4].set(438, 1204);
+	paredeInv[5].set(512, 1130);
+	paredeInv[6].set(612, 1120);
+	paredeInv[7].set(612, 1020);
+	paredeInv[8].set(574, 916);
+	paredeInv[9].set(438, 880);
+	paredeInv[10].set(313, 831);
+	paredeInv[11].set(239, 732);
+	paredeInv[12].set(239, 600);
+	paredeInv[13].set(239, 526);
+	paredeInv[14].set(239, 412);
+	paredeInv[15].set(239, 312);
+	paredeInv[16].set(239, 201);
+	paredeInv[17].set(313, 127);
+	paredeInv[18].set(426, 89);
+	paredeInv[19].set(538, 74);
+	paredeInv[20].set(671, 74);
+	paredeInv[21].set(814, 74);
+	paredeInv[22].set(929, 89);
+	paredeInv[23].set(1055, 97);
+	paredeInv[24].set(1158, 127);
+	paredeInv[25].set(1251, 167);
+	paredeInv[26].set(1306, 264);
+	paredeInv[27].set(1306, 378);
+	paredeInv[28].set(1306, 460);
+	paredeInv[29].set(1253, 560);
+	paredeInv[30].set(1253, 674);
+	paredeInv[31].set(1236, 768);
+	paredeInv[32].set(1162, 842);
+	paredeInv[33].set(1053, 872);
+	paredeInv[34].set(921, 916);
+	paredeInv[35].set(888, 1020);
+	paredeInv[36].set(888, 1120);
+	paredeInv[37].set(979, 1130);
+	paredeInv[38].set(1053, 1204);
+	paredeInv[39].set(1053, 1308);
+	paredeInv[40].set(962, 1393);
+	paredeInv[41].set(855, 1417);
 
 }
 
@@ -41,7 +83,9 @@ void ofApp::update(){
 		before = ofGetElapsedTimef();
 
 		
-		player.colidiuCom(v, mundo.posicao, mundo.velocidade, 150);
+		for (int i = 0; i < 42; i++) {
+			player.colidiuCom(paredeInv[i], mundo.posicao, mundo.velocidade, 70);
+		}
 		for (int i = 0; i < 2; i++) {
 			if (inimigo[i].m_vida > 0) {
 				player.colidiuCom(inimigo[i].m_posicao, mundo.posicao, mundo.velocidade, inimigo[i].m_spriteTamX / 2.f);
@@ -56,7 +100,6 @@ void ofApp::update(){
 
 		sons.AmbienteBatalha(player.m_procurado);
 		sons.AmbientePacifico(player.m_procurado);
-		std::cout << std::endl;
 
 	//Controlando o player
 		player.animacao(gameTime);
@@ -76,7 +119,12 @@ void ofApp::update(){
 void ofApp::draw(){
 	
 	mundo.desenhar();
-	ofDrawCircle(mundo.posicao + v, 150);
+
+	/*
+	for (int i = 0; i < 42; i++)	{
+		ofDrawCircle(mundo.posicao + paredeInv[i], 70);
+	}*/
+
 	ofSetColor(255, 255, 255);
 	for (int i = 0; i < 2; i++) {
 		if(inimigo[i].m_vida > 0)
@@ -108,6 +156,16 @@ void ofApp::keyPressed(int key){
 		teclado.keyLeft= true;
 	if (key == OF_KEY_RIGHT)
 		teclado.keyRight = true;
+
+	if (key == OF_KEY_ESC) {
+		player.~Jogador();
+		sons.~Som();
+		mundo.~Mapa();
+		for (int i = 0; i < 2; i++) {
+			inimigo[i].~Inimigo();
+		}
+		
+	}
 }
 
 

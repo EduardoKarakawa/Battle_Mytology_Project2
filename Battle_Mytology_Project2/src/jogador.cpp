@@ -11,15 +11,16 @@ void Jogador::iniciar() {
 	strcpy(m_action, "iddle");
 	m_sprite.loadImage("jogador/iddle.png");
 	m_espada.loadImage("jogador/espada.png");
-	m_spriteTamX = 76;
-	m_spriteTamY = 76;
+	m_totalFrames = 6;
+	m_spriteTamX = m_sprite.getWidth() / (m_totalFrames * 1.f);
+	m_spriteTamY = m_sprite.getHeight() / 4.f;
 	m_posicao.set(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
-	m_sprite.setAnchorPoint(m_spriteTamX / 2, m_spriteTamY / 2);
+	m_sprite.setAnchorPoint(m_spriteTamX / 2.f, m_spriteTamY * 0.8f);
 	m_frame = 0;
-	m_totalFrames = 8;
 	m_direcao = 1;
 	m_atakou = false;
 	m_procurado = false;
+	r_raioColisao = 20.f;
 }
 
 
@@ -70,6 +71,7 @@ void Jogador::desenhar(ofApp::KeyInput tecla) {
 	int tmp_w = 0, tmp_h = 0;
 	ofPoint tmp_point;
 	tmp_point.set(0, 0);
+	/*Desenha a espada*/
 	if (m_atakou) {
 		if (tecla.keyLeft) {
 			tmp_w = -80;
@@ -95,9 +97,9 @@ void Jogador::desenhar(ofApp::KeyInput tecla) {
 			tmp_point.set(80, 160);
 			m_espada.setAnchorPoint(80, 0);
 		}
-		m_espada.drawSubsection(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, tmp_w, tmp_h, tmp_point.x , tmp_point.y);
+		m_espada.drawSubsection(m_posicao.x, m_posicao.y, tmp_w, tmp_h, tmp_point.x , tmp_point.y);
 	}
-	m_sprite.drawSubsection(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2, m_spriteTamX, m_spriteTamY, m_spriteTamX * m_frame, m_spriteTamY * m_direcao);
+	m_sprite.drawSubsection(m_posicao.x, m_posicao.y, m_spriteTamX, m_spriteTamY, m_spriteTamX * m_frame, m_spriteTamY * m_direcao);
 
 }
 
@@ -109,7 +111,7 @@ void Jogador::colidiuCom(ofVec2f objeto, ofVec2f& mnd, ofVec2f& vel, float raioO
 	//vetor de posicao do (objeto + mundo) - player para fazer aumentar a velocidade 
 	//contraria da movimentacao do mundo
 
-	if (m_posicao.distance((objeto + mnd)) <= raioObj + m_spriteTamX / 2) {
+	if (m_posicao.distance((objeto + mnd)) <= raioObj + r_raioColisao) {
 		vel = -((mnd + objeto) - m_posicao); //Divide por 4 para diminuir a tremedeira
 	}
 }
@@ -134,5 +136,9 @@ void Jogador::atacar(ofApp::KeyInput tecla, Som tmp_som) {
 
 		m_atakeTime = m_atakou && (m_atakeTime < TEMPO_ATAQUE) ? m_atakeTime + ofGetLastFrameTime() : 0;
 		m_atakou = m_atakeTime <= 0 ? false : m_atakou;
+
+}
+
+Jogador::~Jogador() {
 
 }

@@ -56,8 +56,6 @@ void Som::JogadorAndando(){
 	if (!m_jogador_andando[m_andando].getIsPlaying()) {
 		m_andando = rand() % 4;
 		m_jogador_andando[m_andando].play();
-		
-		 std::cout << m_andando << std::endl;
 	}
 }
 
@@ -68,7 +66,6 @@ void Som::AmbientePacifico(bool perseguido) {
 		m_mapa_peacefulMusic.setLoop(true);
 		m_mapa_peacefulMusic.play();
 	}
-	std::cout << "Pacifico ";
 	if(perseguido){
 		DiminuirVolume(m_mapa_peacefulMusic);
 	}
@@ -81,7 +78,6 @@ void Som::AmbientePacifico(bool perseguido) {
 
 
 void Som::AmbienteBatalha(bool perseguido) {
-	std::cout << "Batalha ";
 	if (!m_mapa_battleMusic.getIsPlaying() && perseguido) {
 		m_mapa_battleMusic.setLoop(true);
 		m_mapa_battleMusic.play();
@@ -100,13 +96,14 @@ void Som::AmbienteBatalha(bool perseguido) {
 
 
 void Som::DiminuirVolume(ofSoundPlayer &sound) {
-	std::cout << sound.getVolume();
 	sound.getVolume() > 0 ? sound.setVolume(sound.getVolume() - 0.2f * ofGetLastFrameTime()) : sound.setVolume(0);
 
 }
 
 
 void Som::AumentarVolume(ofSoundPlayer &sound, float max_vol) {
-	std::cout << sound.getVolume();
 	sound.getVolume() < max_vol ? sound.setVolume(sound.getVolume() + 0.2f * ofGetLastFrameTime()) : sound.setVolume(max_vol);
+}
+
+Som::~Som() {
 }

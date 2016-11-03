@@ -3,8 +3,8 @@
 #include "ofApp.h";
 #include "som.h"
 
-#define MAXSPEED 150.f
-#define FAT_ATRITO 8.f
+#define MAXSPEED 100.f
+#define FAT_ATRITO 15.f
 #define VELOCIDADE 30.f
 
 class Mapa {

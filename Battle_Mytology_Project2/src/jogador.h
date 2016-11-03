@@ -4,9 +4,9 @@
 #include "som.h"
 
 #define MAXSPEED 300.f
-#define FAT_ATRITO 8.f
+#define FAT_ATRITO 12.f
 #define VELOCIDADE 30.f
-#define VELOCIDADE_ANIMACAO 1.f / 5.f
+#define VELOCIDADE_ANIMACAO 1.f / 7.f
 #define TEMPO_ATAQUE 0.3f
 
 class Jogador {

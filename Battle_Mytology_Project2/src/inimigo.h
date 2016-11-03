@@ -6,7 +6,7 @@
 
 #define MAX_AREA 500
 #define VELOCIDADE_ANIMACAO 0.7f
-#define VELOCIDADE 80.f
+#define VELOCIDADE 70.f
 #define CAMPO_VISAO 1200.f
 #define STUN_TIME 0.17f
 

@@ -3,6 +3,7 @@
 #include "ofApp.h";
 #include "som.h"
 
+
 #define MAXSPEED 100.f
 #define FAT_ATRITO 15.f
 #define VELOCIDADE 30.f
@@ -15,9 +16,10 @@ class Mapa {
 
 		
 		void iniciar(float x, float y);
-		void mover(ofApp::KeyInput teclas, Som &tmp_som);
-		void atrito(ofApp::KeyInput teclas);
+		void mover(KeyInput teclas, Som &tmp_som);
+		void atrito(KeyInput teclas);
 		void desenhar();
+
 
 		~Mapa();
 };

@@ -3,11 +3,11 @@
 
 #include "jogador.h"
 #include "mapa.h"
-#include "inimigo.h"
 #include "som.h"
+#include "GameControl.h"
 
 Jogador player;
-Inimigo inimigo[2];
+GameControl gmControl;
 Mapa mundo;
 Som sons; 
 ofVec2f paredeInv[41];
@@ -16,6 +16,7 @@ ofVec2f paredeInv[41];
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::setup(){
+	srand(time(NULL));
 	//Iniciando contagem de tempo de execução
 	before = ofGetElapsedTimef();
 	sons.iniciar();
@@ -23,13 +24,15 @@ void ofApp::setup(){
 	mundo.iniciar(-750 + ofGetWidth() / 2.f, -1200 + ofGetHeight() / 2.f);
 
 	//Inicializando o Player
-	
 
-	inimigo[0].iniciar(800,300, mundo.posicao);
-	inimigo[1].iniciar(100, 800, mundo.posicao);
-	
 	player.iniciar();
 
+	gmControl.m_round = 5;
+	gmControl.Iniciar(mundo.posicao);
+	
+	
+
+	// Blocos de colisao
 	paredeInv[0].set(748, 1419);
 	paredeInv[1].set(638, 1417);
 	paredeInv[2].set(538, 1393);
@@ -78,6 +81,8 @@ void ofApp::setup(){
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::update(){
+	if (player.m_vida > 0) {
+
 	//Atualizando a contagem de tempo de execução do jogo.
 		gameTime = ofGetElapsedTimef() - before;
 		before = ofGetElapsedTimef();
@@ -86,17 +91,8 @@ void ofApp::update(){
 		for (int i = 0; i < 42; i++) {
 			player.colidiuCom(paredeInv[i], mundo.posicao, mundo.velocidade, 70);
 		}
-		for (int i = 0; i < 2; i++) {
-			if (inimigo[i].m_vida > 0) {
-				player.colidiuCom(inimigo[i].m_posicao, mundo.posicao, mundo.velocidade, inimigo[i].m_spriteTamX / 2.f);
-			
-				inimigo[i].animar(gameTime);
-				inimigo[i].colidiuCom(inimigo, mundo.posicao, i);
-				inimigo[i].mover(player.m_posicao, mundo.posicao, player.m_spriteTamX);
-				inimigo[i].levardano(player.m_posicao, mundo.posicao, player.m_spriteTamX, teclado, (player.m_atakeTime <= ofGetLastFrameTime()) && player.m_atakou, sons);
-				player.m_procurado = inimigo[i].seguir(player.m_posicao, mundo.posicao);
-			}
-		}
+		
+		gmControl.UpdateGame(player, mundo, teclado, sons, gameTime);
 
 		sons.AmbienteBatalha(player.m_procurado);
 		sons.AmbientePacifico(player.m_procurado);
@@ -109,6 +105,9 @@ void ofApp::update(){
 	//Controlando o Mundo
 		mundo.mover(teclado, sons);
 
+	}
+	
+
 		
 		
 }
@@ -117,20 +116,28 @@ void ofApp::update(){
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::draw(){
-	
+	float centroTelaX = ofGetWidth() / 2.f;
 	mundo.desenhar();
 
-	/*
-	for (int i = 0; i < 42; i++)	{
-		ofDrawCircle(mundo.posicao + paredeInv[i], 70);
-	}*/
-
 	ofSetColor(255, 255, 255);
-	for (int i = 0; i < 2; i++) {
-		if(inimigo[i].m_vida > 0)
-		 inimigo[i].desenhar(mundo.posicao);
+	for (int i = 0; i < gmControl.m_round; i++) {
+		if(!gmControl.m_inimigos[i].m_morto)
+			gmControl.m_inimigos[i].desenhar(mundo.posicao, gmControl.m_spriteInimigo);
 	}
 	player.desenhar(teclado);
+	player.DrawVida();
+
+	if (gmControl.m_desenharMudarRound) {
+		gmControl.m_textos50.drawString("WavE", centroTelaX - 100.f, ofGetHeight() * 0.24f);
+		gmControl.m_textos50.drawString(to_string(gmControl.m_round + 1), centroTelaX - 25.f, (ofGetHeight() * 0.24f) + 70.f);
+	}
+
+	if (player.m_vida <= 0) {
+		gmControl.m_textos50.drawString("Voce Morreu!", centroTelaX - 250.f, ofGetHeight() * 0.3f);
+		gmControl.m_textos20.drawString("Aperte", centroTelaX - 50.f, (ofGetHeight() * 0.33f) + 250.f);
+		gmControl.m_textos50.drawString("ESPACO", centroTelaX - 150.f, (ofGetHeight() * 0.33f) + 320.f);
+		gmControl.m_textos20.drawString("para reiniciar", centroTelaX - 100.f, (ofGetHeight() * 0.33f) + 350.f);
+	}
 }
 
 
@@ -156,15 +163,20 @@ void ofApp::keyPressed(int key){
 		teclado.keyLeft= true;
 	if (key == OF_KEY_RIGHT)
 		teclado.keyRight = true;
+	if (key == ' ') {
+		if (player.m_vida <= 0)
+			setup();
+		teclado.keySpace = true;
+	}
+		
 
 	if (key == OF_KEY_ESC) {
 		player.~Jogador();
 		sons.~Som();
 		mundo.~Mapa();
-		for (int i = 0; i < 2; i++) {
-			inimigo[i].~Inimigo();
-		}
-		
+		teclado.~KeyInput();
+		gmControl.~GameControl();
+
 	}
 }
 
@@ -181,6 +193,8 @@ void ofApp::keyReleased(int key){
 		teclado.keyA = false;
 	if ((key == 'D') || (key == 'd'))
 		teclado.keyD = false;
+	if (key == ' ')
+		teclado.keySpace = false;
 
 	//Inputs de ataque
 	if (key == OF_KEY_UP)
@@ -242,7 +256,6 @@ void ofApp::mouseExited(int x, int y){
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-
 }
 
 

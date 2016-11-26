@@ -10,7 +10,7 @@ void Mapa::iniciar(float x, float y) {
 }
 
 
-void Mapa::mover(ofApp::KeyInput teclas, Som &tmp_som) {
+void Mapa::mover(KeyInput teclas, Som &tmp_som) {
 	//Aumenta a velocidade de X ou Y ate o maximo de velocidade de acordo com a tecla precionada
 	if (teclas.keyD && (velocidade.x < MAXSPEED)) {
 		velocidade.x += VELOCIDADE;
@@ -44,7 +44,7 @@ void Mapa::desenhar() {
 
 //---------------- Atrito de movimentação do jogador----------------------------------------------
 //------------------------------------------------------------------------------------------------
-void Mapa::atrito(ofApp::KeyInput teclas) {
+void Mapa::atrito(KeyInput teclas) {
 
 	//Diminui a velocidade de X ou Y gradualmente ate chegar em 0, so diminui para nas direcoes que a
 	//tecla nao estiver precionada

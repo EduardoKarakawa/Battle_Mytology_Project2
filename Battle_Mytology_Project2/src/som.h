@@ -2,8 +2,8 @@
 
 #include  "ofApp.h"
 
-#define MAX_PEACEFUL 0.3f
-#define MAX_BATTLE 0.5f
+#define MAX_PEACEFUL 1.7f
+#define MAX_BATTLE 0.15f
 
 
 

@@ -10,9 +10,18 @@
     <ClCompile Include="src\jogador.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\mapa.cpp" />
-    <ClCompile Include="src\inimigo.cpp" />
-    <ClCompile Include="src\som.cpp" />
+    <ClCompile Include="src\inimigo.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mapa.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\som.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameControl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -29,9 +38,19 @@
     <ClInclude Include="src\jogador.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\mapa.h" />
-    <ClInclude Include="src\inimigo.h" />
-    <ClInclude Include="src\som.h" />
+    <ClInclude Include="src\inimigo.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mapa.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\som.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameControl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\KeyInput.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

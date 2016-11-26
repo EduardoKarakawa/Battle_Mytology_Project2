@@ -2,6 +2,9 @@
 
 
 #include "ofMain.h"
+#include "KeyInput.h"
+#include <iostream>
+#include <time.h>
 
 class ofApp : public ofBaseApp{
 	
@@ -22,16 +25,7 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
 
-		struct KeyInput {
-			bool keyUp, keyDown;
-			bool keyLeft, keyRight;
-			bool keyW, keyS;
-			bool keyA, keyD;
-		};
-		
-	
 	
 		float before, gameTime;
 		KeyInput teclado;

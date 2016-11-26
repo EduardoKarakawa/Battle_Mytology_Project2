@@ -26,7 +26,7 @@ void Som::iniciar() {
 	m_inimigo_levaDano[2].loadSound("inimigo/som/punch_02.wav");
 	m_inimigo_levaDano[3].loadSound("inimigo/som/punch_03.wav");
 
-	m_mapa_peacefulMusic.loadSound("mapa/som/peaceful_moment.wav");
+	m_mapa_peacefulMusic.loadSound("mapa/som/PeacefulMusic.mp3");
 	m_mapa_peacefulMusic.setVolume(MAX_PEACEFUL);
 
 	m_mapa_battleMusic.loadSound("mapa/som/battle_music.mp3");

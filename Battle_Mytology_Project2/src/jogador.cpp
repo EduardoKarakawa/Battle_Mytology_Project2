@@ -10,7 +10,6 @@ void Jogador::iniciar() {
 	//Funcao para iniciar os parametros do Jogador 
 	strcpy(m_action, "iddle");
 	m_sprite.loadImage("jogador/iddle.png");
-	m_espada.loadImage("jogador/espada.png");
 	m_totalFrames = 6;
 	m_spriteTamX = m_sprite.getWidth() / (m_totalFrames * 1.f);
 	m_spriteTamY = m_sprite.getHeight() / 4.f;
@@ -21,22 +20,26 @@ void Jogador::iniciar() {
 	m_atakou = false;
 	m_procurado = false;
 	r_raioColisao = 20.f;
+	m_vida = 100.f;
+	m_vidaVazia.load("ui/barraVidaVazia.png");
+	m_vidaCheia.load("ui/barraVidaCheia.png");
 }
 
 
 //---------------- Acoes do jogador---------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
-void Jogador::acoes(ofApp::KeyInput teclas) {
+void Jogador::acoes(KeyInput teclas) {
 	//Definindo a direcao pela tecla que estiver precionada, se nao tiver nenhuma 
 	//sera definido a ultima tecla precionada
-	m_direcao = teclas.keyA ? 0 : 
-	teclas.keyW ? 1 : 
-	teclas.keyD ? 2 :
-	teclas.keyS ? 3 :
-	teclas.keyLeft ? 0 : 
-	teclas.keyUp ? 1:
-	teclas.keyRight ? 2 :
-	teclas.keyDown ? 3 : m_direcao;
+	m_direcao = teclas.keyA ? 0 :
+		teclas.keyW ? 1 :
+		teclas.keyD ? 2 :
+		teclas.keyS ? 3 : m_direcao;
+
+	m_direcao = teclas.keyLeft ? 0 :
+		teclas.keyUp ? 1:
+		teclas.keyRight ? 2 :
+		teclas.keyDown ? 3 : m_direcao;
 	
 	//Verificando se esta parado
 	if (!teclas.keyA && !teclas.keyD && !teclas.keyW && !teclas.keyS)
@@ -58,7 +61,11 @@ void Jogador::animacao(float game_time) {
 	m_frameTime += game_time; //Fazendo contagem de tempo
 								
 	//Trocando o indice de posição do frame do player
-	if (m_frameTime >= VELOCIDADE_ANIMACAO) {
+	if (m_atakou && (m_frameTime >= VELOCIDADE_ATAKE)) {
+		m_frame = (m_frame + 1) % m_totalFrames;
+		m_frameTime = 0;
+	}
+	else if (m_frameTime >= VELOCIDADE_ANIMACAO) {
 		m_frame = (m_frame + 1) % m_totalFrames;
 		m_frameTime = 0;
 	}
@@ -67,38 +74,16 @@ void Jogador::animacao(float game_time) {
 
 //---------------- Desenhar o jogador-------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
-void Jogador::desenhar(ofApp::KeyInput tecla) {
-	int tmp_w = 0, tmp_h = 0;
-	ofPoint tmp_point;
-	tmp_point.set(0, 0);
-	/*Desenha a espada*/
+void Jogador::desenhar(KeyInput tecla) {
 	if (m_atakou) {
-		if (tecla.keyLeft) {
-			tmp_w = -80;
-			tmp_h = 160;
-			tmp_point.set(80, 80);
-			m_espada.setAnchorPoint(0, 80);
-		}
-		else if (tecla.keyUp) {
-			tmp_w = 160;
-			tmp_h = 80;
-			tmp_point.set(0, 0);
-			m_espada.setAnchorPoint(80,80);
-		}
-		else if (tecla.keyRight) {
-			tmp_w = 80;
-			tmp_h = 160;
-			tmp_point.set(160, 0);
-			m_espada.setAnchorPoint(0, 80);
-		}
-		else if (tecla.keyDown) {
-			tmp_w = 160;
-			tmp_h = 80;
-			tmp_point.set(80, 160);
-			m_espada.setAnchorPoint(80, 0);
-		}
-		m_espada.drawSubsection(m_posicao.x, m_posicao.y, tmp_w, tmp_h, tmp_point.x , tmp_point.y);
+		m_sprite.loadImage("jogador/atacando.png");
 	}
+
+	m_spriteTamX = m_sprite.getWidth() / (m_totalFrames * 1.f);
+	m_spriteTamY = m_sprite.getHeight() / 4.f;
+	m_posicao.set(ofGetWindowWidth() / 2, ofGetWindowHeight() / 2);
+	m_sprite.setAnchorPoint(m_spriteTamX / 2.f, m_spriteTamY * 0.8f);
+
 	m_sprite.drawSubsection(m_posicao.x, m_posicao.y, m_spriteTamX, m_spriteTamY, m_spriteTamX * m_frame, m_spriteTamY * m_direcao);
 
 }
@@ -128,7 +113,7 @@ int Jogador::getAngulo(ofVec2f pos, ofVec2f mund) {
 	//return atan2f(tmp_prox_posicao.y - m_posicao.y, tmp_prox_posicao.x - m_posicao.x) * 180 / 3.14;
 }
 
-void Jogador::atacar(ofApp::KeyInput tecla, Som tmp_som) {
+void Jogador::atacar(KeyInput tecla, Som tmp_som) {
 	if ((tecla.keyUp || tecla.keyDown || tecla.keyLeft || tecla.keyRight) && (m_atakeTime <= 0)) {
 		tmp_som.JogadorAtakeEspada();
 		m_atakou = true;
@@ -141,4 +126,18 @@ void Jogador::atacar(ofApp::KeyInput tecla, Som tmp_som) {
 
 Jogador::~Jogador() {
 
+}
+
+void Jogador::DrawVida() {
+	m_vidaCheia.drawSubsection(100.f, ofGetHeight() - 100.f, m_vidaCheia.getWidth() * (m_vida / 100.f), m_vidaCheia.getHeight(), 90, 90);
+	m_vidaVazia.draw(100.f, ofGetHeight() - 100.f);
+}
+
+
+
+//---------------- Levar Dano --------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+void Jogador::levardano(float dano) {
+	if(dano != -1)
+		m_vida -= dano;
 }

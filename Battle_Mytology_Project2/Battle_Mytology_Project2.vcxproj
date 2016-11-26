@@ -175,6 +175,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\GameControl.cpp" />
     <ClCompile Include="src\inimigo.cpp" />
     <ClCompile Include="src\jogador.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -183,8 +184,10 @@
     <ClCompile Include="src\som.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameControl.h" />
     <ClInclude Include="src\inimigo.h" />
     <ClInclude Include="src\jogador.h" />
+    <ClInclude Include="src\KeyInput.h" />
     <ClInclude Include="src\mapa.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\som.h" />
